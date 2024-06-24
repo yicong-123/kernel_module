@@ -1,5 +1,6 @@
 #include <linux/kernel.h>
 #include <linux/module.h>                    /* 内核模块必需的头文件 */
+#include "km_proc.h"
 
 MODULE_LICENSE("GPL");                       /* 声明这是GNU General Public License的任意版本 */
 MODULE_AUTHOR("Myself");                     /* 模块开发者，一般写开发者邮箱 */
@@ -9,13 +10,22 @@ static int __init km_init(void)              /* 模块初始化 */
 {
     int ret = 0;
 
+    if (km_init_proc() < 0)
+    {
+        ret = -1;
+        goto err;
+    }
     printk("My kernel module init success!\n");
 
+    return ret;
+err:
+    printk("My kernel module init fail!\n");
     return ret;
 }
 
 static void __exit km_exit(void)             /* 模块退出 */
 {
+    km_exit_proc();
     printk("My kernel module exit success!\n");
 }
 
