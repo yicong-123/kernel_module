@@ -6,6 +6,9 @@ MODULE_LICENSE("GPL");                       /* 声明这是GNU General Public L
 MODULE_AUTHOR("Myself");                     /* 模块开发者，一般写开发者邮箱 */
 MODULE_DESCRIPTION("Linux kernel module");   /* 模块功能简单描述 */
 
+static int g_insmod_with_param = 0;
+module_param(g_insmod_with_param, int, 0400);
+
 static int __init km_init(void)              /* 模块初始化 */
 {
     int ret = 0;
@@ -15,6 +18,8 @@ static int __init km_init(void)              /* 模块初始化 */
         ret = -1;
         goto err;
     }
+
+    printk("g_insmod_with_param = %d\n", g_insmod_with_param);
     printk("My kernel module init success!\n");
 
     return ret;
